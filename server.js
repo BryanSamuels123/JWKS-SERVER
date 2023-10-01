@@ -14,7 +14,7 @@ app.listen(8080, ()=> console.log("Server is listening on port 8080"));
 
 // helper functions to generate the KID and the expiry timestamp
 const generateKID = () => (crypto.randomBytes(16).toString("hex")); // generate a random keyID
-const getExp = () => {
+const getExp = () => { // generate the expiry
     const curr = new Date();
     expiresAtEpoch =  (Math.floor(curr.getTime() / 1000)) + 3600;
     return expiresAtEpoch;
@@ -52,7 +52,7 @@ app.get('/.well-known/jwks.json', (req, res) =>{ //get request
     }
 });
 
-app.post('/auth', (req, res) => { // finish post request
+app.post('/auth', (req, res) => { // the post request
 
     const {publicKey, privateKey} = crypto.generateKeyPairSync("rsa", { // generate public and private keys
         modulusLength: 2048,
@@ -92,10 +92,10 @@ app.post('/auth', (req, res) => { // finish post request
         }
     });
 
-    let tempPk = crypto.createPublicKey(publicKey);
+    let tempPk = crypto.createPublicKey(publicKey); // create the JWK base
     tempPk = tempPk.export({ format: 'jwk' });
 
-    const jwk = {
+    const jwk = { 
         'kid': kid,
         'alg': 'RS256',
         'kty': 'RSA',
@@ -119,6 +119,14 @@ app.post('/auth', (req, res) => { // finish post request
         algorithm: "RS256",
     }
 
+    const badFields = ["pword", "password"];
+
+    for (const key in req.body){ // remove password  field
+        if( badFields.includes(key.toLowerCase())){
+            delete req.body[key];
+        }
+    }
+
     const payload =  req.body; // set payload
     payload["eat"] = eat;
     payload["kid"] = kid;
@@ -127,49 +135,4 @@ app.post('/auth', (req, res) => { // finish post request
     res.status(200).send(jwToken); // send key
 
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-What needs to be done:
-
-    1. The get JWKS needs to return the jwks that are available:
-    multiple jwt will exist due to the requirements of the assignment.
-    
-    2. the post needs to make a jwk and a jwt due to the requirements.
-        The jwt is signed by the private key and given the same expiry as the jwk.
-        The client side can then verify the jwt using the public key 
-    
-    This is all that's required for this assignment, its really simple.
-    (Technically don't need the saved private key for anything else other than displaying the expired pairs)
-
-    3. make tests.
-
-*/
-
-// /auth returns a jwt on post request that is signed by the private key, the client can access public key to verify the signature.
-// the kid must match the public key that corresponds to the private key.
-// so if expired, create a new jwk, if not keep using the same jwt, keep the private key saved on the server
-// in this case the professor wants us to keep the old expired key pairs, creating the jwt is easy,
-
-
-
-
-
-
 
