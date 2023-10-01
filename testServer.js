@@ -26,7 +26,7 @@ const doPost = async (data) =>{ // constructs the post request
     }
 
     try{
-        const dataStream = await fetch("http://localhost:8080/auth", params);
+        const dataStream = await fetch("http://localhost:8080/auth", params); // make post request
         const retData = await dataStream.text();
 
         console.log(`Returned data for variable ${data.username}:\n${retData}\n\n`)
@@ -37,7 +37,7 @@ const doPost = async (data) =>{ // constructs the post request
     
 }
 
-const testPost = () => { // testing the post request will also test the get 
+const testPost = () => { // testing the post request against multiple inputs
     const users = [
         { "username": "jdoe001", "role": "user", "password": "password1" },
         { "username": "asmith002", "role": "admin", "PASSWORD": "password2", "expired": true },
