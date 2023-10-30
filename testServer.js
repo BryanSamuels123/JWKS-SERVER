@@ -5,9 +5,10 @@ const testGet = async () => { // tests the get function
 
     try {
         const resp = await fetch("http://localhost:8080/.well-known/jwks.json");
-        const data = await resp.json();
-
+        const data = await resp.text();
+        console.log("\n\nFinal get test:\n")
         console.log(data);
+        console.log("\nPassed Final get Test\n")
     }
     catch(err){
         console.error("Error With 'testGet()':\n", err);
@@ -29,10 +30,10 @@ const doPost = async (data) =>{ // constructs the post request
         const dataStream = await fetch("http://localhost:8080/auth", params); // makes the post request
         const retData = await dataStream.text();
 
-        console.log(`Returned data for variable ${data.username}:\n${retData}\n\n`)
+        console.log(`Passed test "POST"\nReturned data for variable ${data.username}:\n${retData}\n\n`)
     }
     catch(err){
-        console.error("Error With 'doPost()':\n", err);
+        console.error(`Error With 'doPost()' for ${data.username}:\n`, err);
     }
     
 }
@@ -60,5 +61,5 @@ const testPost = () => { // testing the post request against other
 testPost();
 
 
-console.log("\n\nFinal get test:\n")
+
 testGet();
