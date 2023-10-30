@@ -8,7 +8,7 @@ const testGet = async () => { // tests the get function
         const data = await resp.text();
         console.log("\n\nFinal get test:\n")
         console.log(data);
-        console.log("\nPassed Final get Test\n")
+        console.log("\nPassed Final get Test\n") 
     }
     catch(err){
         console.error("Error With 'testGet()':\n", err);
@@ -30,7 +30,7 @@ const doPost = async (data) =>{ // constructs the post request
         const dataStream = await fetch("http://localhost:8080/auth", params); // makes the post request
         const retData = await dataStream.text();
 
-        console.log(`Passed test "POST"\nReturned data for variable ${data.username}:\n${retData}\n\n`)
+        console.log(`Passed test "POST"\nReturned data for variable ${data.username}:\n${retData}\n\n`) //if post returns valid variable, test passed
     }
     catch(err){
         console.error(`Error With 'doPost()' for ${data.username}:\n`, err);
@@ -38,7 +38,7 @@ const doPost = async (data) =>{ // constructs the post request
     
 }
 
-const testPost = () => { // testing the post request against other 
+const testPost = () => { // testing the post request against multiple inputs
     const users = [
         { "username": "jdoe001", "role": "user", "password": "password1" },
         { "username": "asmith002", "role": "admin", "PASSWORD": "password2", "expired": true },
